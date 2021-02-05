@@ -11,17 +11,19 @@
     <groupId>com.me.generalstore</groupId>
     <artifactId>general-store</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>${generalstore.version}</version>
     <name>general-store</name>
     <description>持续更新项目</description>
 
     <modules>
         <module>general-store-redis</module>
+        <module>general-store-eureka-server</module>
     </modules>
 
     <properties>
         <java.version>1.8</java.version>
         <spring-cloud.version>2020.0.0</spring-cloud.version>
         <spring.framework.version>5.3.3</spring.framework.version>
+        <generalstore.version>0.0.1-SNAPSHOT</generalstore.version>
     </properties>
 </project>

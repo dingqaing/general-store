@@ -5,21 +5,15 @@
 
     <groupId>com.me.generalstore.redis</groupId>
     <artifactId>general-store-redis</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>${generalstore.version}</version>
     <name>general-store-redis</name>
     <description>General Store Redis</description>
 
     <parent>
         <groupId>com.me.generalstore</groupId>
         <artifactId>general-store</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>${generalstore.version}</version>
     </parent>
-
-    <properties>
-        <java.version>1.8</java.version>
-        <spring-cloud.version>2020.0.0</spring-cloud.version>
-        <spring.framework.version>5.3.3</spring.framework.version>
-    </properties>
 
     <dependencies>
         <dependency>
@@ -50,10 +44,10 @@
             <scope>test</scope>
         </dependency>
 
-        <!--        <dependency>-->
-        <!--            <groupId>org.springframework.cloud</groupId>-->
-        <!--            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>-->
-        <!--        </dependency>-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>mysql</groupId>
@@ -76,15 +70,15 @@
     </dependencies>
 
     <dependencyManagement>
-        <!--        <dependencies>-->
-        <!--            <dependency>-->
-        <!--                <groupId>org.springframework.cloud</groupId>-->
-        <!--                <artifactId>spring-cloud-dependencies</artifactId>-->
-        <!--                <version>${spring-cloud.version}</version>-->
-        <!--                <type>pom</type>-->
-        <!--                <scope>import</scope>-->
-        <!--            </dependency>-->
-        <!--        </dependencies>-->
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
     </dependencyManagement>
 
     <build>

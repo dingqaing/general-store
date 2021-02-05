@@ -1,12 +1,11 @@
-
 server:
-  port: 8001
+  port: 8002
 
 spring:
   application:
-    name: general-store
+    name: general-store-redis
   redis:
-    host: "****"
+    host: 192.168.30.251
     port: 6379
     jedis:
       pool:
@@ -17,4 +16,8 @@ spring:
         time-between-eviction-runs: 100000
     client-type: jedis
   datasource:
-    url: "****"
+    url: jdbc:mysql://192.168.30.251:3306/general_store
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8001/eureka/
