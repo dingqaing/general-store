@@ -1,5 +1,9 @@
 package com.me.generalstore.redis.dao;
 
+import com.me.generalstore.redis.model.article.Article;
+
+import java.util.List;
+
 /**
  * Article DAO.
  *
@@ -17,6 +21,15 @@ public interface ArticleDao {
      * @return the string
      */
     String postArticle(String user, String title, String link);
+
+    /**
+     * 获取文章.
+     *
+     * @param page  the page
+     * @param order the order
+     * @return the article
+     */
+    List<Article> getArticle(int page, String order);
 
     /**
      * 文章投票.
