@@ -10,8 +10,7 @@ import redis.clients.jedis.Transaction;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * The type Article dao.
@@ -25,6 +24,8 @@ public class ArticleDaoImpl implements ArticleDao {
     private static final int VOTE_SCORE = 432;
 
     private static final int ONE_WEEK_IN_SECOND = 7 * 86400;
+
+    private static final int ARTICLE_PER_PAGE = 25;
 
     private Jedis jedis;
 
@@ -47,6 +48,22 @@ public class ArticleDaoImpl implements ArticleDao {
         jedis.zadd(RedisDataStructureKey.ARTICLE_SCORE_ZSET, now + VOTE_SCORE, article);
         transaction.exec();
         return articleId;
+    }
+
+    @Override
+    public List<Article> getArticle(int page, String order) {
+        int start = (page - 1) * ARTICLE_PER_PAGE;
+        int end = start + ARTICLE_PER_PAGE - 1;
+
+        Set<String> articleIds = jedis.zrevrange(order, start, end);
+        List<Article> list = new ArrayList<>(16);
+        for (String articleId : articleIds) {
+            Map<String, String> articleMap = jedis.hgetAll(articleId);
+            Article article = new Article();
+            BeanUtils.copyProperties(articleMap, article);
+            list.add(article);
+        }
+        return list;
     }
 
     @Override

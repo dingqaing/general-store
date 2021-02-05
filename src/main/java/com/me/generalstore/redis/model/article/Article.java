@@ -17,6 +17,8 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class Article implements Serializable {
 
+    private String id;
+
     private String title;
 
     private String link;
