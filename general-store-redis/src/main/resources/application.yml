@@ -5,7 +5,7 @@ spring:
   application:
     name: general-store-redis
   redis:
-    host: 192.168.30.251
+    host: "***"
     port: 6379
     jedis:
       pool:
@@ -16,7 +16,7 @@ spring:
         time-between-eviction-runs: 100000
     client-type: jedis
   datasource:
-    url: jdbc:mysql://192.168.30.251:3306/general_store
+    url: "***"
 eureka:
   client:
     service-url:
