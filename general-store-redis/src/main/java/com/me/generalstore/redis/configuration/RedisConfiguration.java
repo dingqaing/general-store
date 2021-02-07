@@ -8,7 +8,7 @@ import redis.clients.jedis.Jedis;
 import javax.annotation.Resource;
 
 /**
- * Resdis 配置类.
+ * Redis 配置类.
  *
  * @author dqq
  * @date 2021 /2/3

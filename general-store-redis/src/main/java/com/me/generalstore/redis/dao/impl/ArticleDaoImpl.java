@@ -1,16 +1,19 @@
 package com.me.generalstore.redis.dao.impl;
 
-import com.me.generalstore.redis.model.article.Article;
 import com.me.generalstore.redis.consts.RedisDataStructureKey;
 import com.me.generalstore.redis.dao.ArticleDao;
+import com.me.generalstore.redis.model.article.Article;
 import lombok.Setter;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Transaction;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * The type Article dao.
@@ -29,10 +32,14 @@ public class ArticleDaoImpl implements ArticleDao {
 
     private Jedis jedis;
 
+    private RedisTemplate<String, Article> redisTemplate;
+
+    private StringRedisTemplate stringRedisTemplate;
+
     @Override
     public String postArticle(String user, String title, String link) {
 
-        String articleId = jedis.incr("article:") + "";
+        String articleId = redisTemplate.opsForValue().increment("article:") + "";
         String voted = "voted:" + articleId;
         long now = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
         String article = "article:" + articleId;
@@ -40,13 +47,21 @@ public class ArticleDaoImpl implements ArticleDao {
         Map<String, String> map = new HashMap<>(16);
         BeanUtils.copyProperties(articleModel, map);
 
-        Transaction transaction = jedis.multi();
-        jedis.sadd(voted, user);
-        jedis.expire(voted, ONE_WEEK_IN_SECOND);
-        jedis.hmset(article, map);
-        jedis.zadd(RedisDataStructureKey.ARTICLE_TIME_ZSET, now, article);
-        jedis.zadd(RedisDataStructureKey.ARTICLE_SCORE_ZSET, now + VOTE_SCORE, article);
-        transaction.exec();
+        stringRedisTemplate.multi();
+        stringRedisTemplate
+                .opsForSet()
+                .add(voted, user);
+        stringRedisTemplate.expire(voted, ONE_WEEK_IN_SECOND, TimeUnit.SECONDS);
+        stringRedisTemplate.
+                <String, String>opsForHash()
+                .putAll(article, new HashMap<>(16));
+        stringRedisTemplate
+                .opsForZSet()
+                .add(RedisDataStructureKey.ARTICLE_TIME_ZSET, article, now);
+        stringRedisTemplate
+                .opsForZSet()
+                .add(RedisDataStructureKey.ARTICLE_SCORE_ZSET, article, now + VOTE_SCORE);
+        stringRedisTemplate.exec();
         return articleId;
     }
 
